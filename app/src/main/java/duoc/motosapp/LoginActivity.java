@@ -1,4 +1,4 @@
-package com.example.cesar_gomez.motosapp;
+package duoc.motosapp;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private AutoCompleteTextView mUsuarioView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -66,8 +74,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+        mUsuarioView = (AutoCompleteTextView) findViewById(R.id.usuario);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -81,8 +88,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button btnIngresar = (Button) findViewById(R.id.btn_ingresar);
+        btnIngresar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -93,50 +100,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
-
     /**
      * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
-
-
+     
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -148,53 +114,47 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         // Reset errors.
-        mEmailView.setError(null);
+        mUsuarioView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String usuario = mUsuarioView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (password.isEmpty()){
+            mPasswordView.setError("Ingrese contraseña");
+            focusView = mPasswordView;
+            cancel = true;
+        }else if(!isPasswordValid(password)) {
             mPasswordView.setError("Contraseña demasiado corta");
             focusView = mPasswordView;
             cancel = true;
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError("Debe ingresar Usuario");
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        // Check for a valid usuario address.
+        if (usuario.isEmpty()) {
+            mUsuarioView.setError("Ingrese usuario");
+            focusView = mUsuarioView;
             cancel = true;
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+            //Existe un error
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            //Continuamos hacia el infito
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(usuario, password);
             mAuthTask.execute((Void) null);
         }
     }
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
 
+    /*Valida el largo de la contraseña */
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -259,8 +219,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             emails.add(cursor.getString(ProfileQuery.ADDRESS));
             cursor.moveToNext();
         }
-
-        addEmailsToAutoComplete(emails);
     }
 
     @Override
@@ -281,11 +239,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
     }
 
     /**
@@ -293,47 +246,76 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
+        private static final String TAG = "LoginActivity";
+        private final String mUsuario;
         private final String mPassword;
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
+        //constructor
+        UserLoginTask(String usuario, String password) {
+            mUsuario = usuario;
             mPassword = password;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            boolean aceptado = false;
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+
+            final String NAMESPACE = "http://suarpe.com/";
+            final String URL="http://201.236.131.203:8091/ServicioClientes.asmx?op=LoginUsuario";
+            final String METHOD_NAME = "LoginUsuario";
+            final String SOAP_ACTION = "http://sgoliver.net/ListadoClientes";
+            try
+            {
+                SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+                request.addProperty("user", this.mUsuario);
+                request.addProperty("password", this.mPassword);
+
+                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(request);
+
+                HttpTransportSE transporte = new HttpTransportSE(URL);
+                transporte.call(SOAP_ACTION, envelope);
+
+                SoapPrimitive correcto = (SoapPrimitive) envelope.getResponse();
+                Log.i(TAG, "algo");
+                Log.i(TAG, correcto.toString());
+
+
+                /*
+                SoapObject resSoap =(SoapObject) envelope.getResponse();
+                listaClientes = new Cliente[resSoap.getPropertyCount()];
+
+                for (int i = 0; i < listaClientes.length; i++)
+                {
+                    SoapObject ic = (SoapObject)resSoap.getProperty(i);
+
+                    Cliente cli = new Cliente();
+                    cli.id = Integer.parseInt(ic.getProperty(0).toString());
+                    cli.nombre = ic.getProperty(1).toString();
+                    cli.telefono =
+                    Integer.parseInt(ic.getProperty(2).toString());
+
+                    listaClientes[i] = cli;
+                }*/
             }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
+            catch (Exception e)
+            {
+                aceptado = false;
             }
-
-            // TODO: register the new account here.
-            return true;
+            return aceptado;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final Boolean aceptado) {
             mAuthTask = null;
-            showProgress(false);
+            //showProgress(false);
 
-            if (success) {
+            if (aceptado) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError("Contraseña incorrecta");
                 mPasswordView.requestFocus();
             }
         }

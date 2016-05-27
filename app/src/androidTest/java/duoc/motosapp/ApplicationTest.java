@@ -1,4 +1,4 @@
-package com.example.cesar_gomez.motosapp;
+package duoc.motosapp;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
