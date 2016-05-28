@@ -3,6 +3,7 @@ package duoc.motosapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -260,11 +261,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             boolean aceptado = false;
 
-
             final String NAMESPACE = "http://suarpe.com/";
             final String URL="http://201.236.131.203:8091/ServicioClientes.asmx?op=LoginUsuario";
             final String METHOD_NAME = "LoginUsuario";
-            final String SOAP_ACTION = "http://sgoliver.net/ListadoClientes";
+            final String SOAP_ACTION = "http://suarpe.com/LoginUsuario";
             try
             {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
@@ -273,36 +273,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.dotNet = true;
+                envelope.implicitTypes = true;
                 envelope.setOutputSoapObject(request);
 
                 HttpTransportSE transporte = new HttpTransportSE(URL);
+                //transporte.debug = true;
+                transporte.setXmlVersionTag("<!--?xml version=\"1.0\" encoding= \"UTF-8\" ?-->");
                 transporte.call(SOAP_ACTION, envelope);
 
-                SoapPrimitive correcto = (SoapPrimitive) envelope.getResponse();
-                Log.i(TAG, "algo");
-                Log.i(TAG, correcto.toString());
+                SoapObject respuesta = (SoapObject) envelope.bodyIn;
+                if(respuesta != null){
+                    String esUsuario = respuesta.getProperty(0).toString();
 
-
-                /*
-                SoapObject resSoap =(SoapObject) envelope.getResponse();
-                listaClientes = new Cliente[resSoap.getPropertyCount()];
-
-                for (int i = 0; i < listaClientes.length; i++)
-                {
-                    SoapObject ic = (SoapObject)resSoap.getProperty(i);
-
-                    Cliente cli = new Cliente();
-                    cli.id = Integer.parseInt(ic.getProperty(0).toString());
-                    cli.nombre = ic.getProperty(1).toString();
-                    cli.telefono =
-                    Integer.parseInt(ic.getProperty(2).toString());
-
-                    listaClientes[i] = cli;
-                }*/
-            }
-            catch (Exception e)
+                    if(esUsuario.equals("1")){
+                        aceptado = true;
+                    }else{
+                        aceptado = false;
+                    }
+                }else{
+                    aceptado = false;
+                }
+            }catch (Exception e)
             {
                 aceptado = false;
+                e.printStackTrace();
             }
             return aceptado;
         }
@@ -310,13 +304,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected void onPostExecute(final Boolean aceptado) {
             mAuthTask = null;
-            //showProgress(false);
 
-            if (aceptado) {
+            if (aceptado){
+                Intent i = new Intent(LoginActivity.this, NoticiaEventos.class);
+                startActivity(i);
                 finish();
-            } else {
+            }else{
                 mPasswordView.setError("Contraseña incorrecta");
                 mPasswordView.requestFocus();
+                showProgress(false);
             }
         }
 
