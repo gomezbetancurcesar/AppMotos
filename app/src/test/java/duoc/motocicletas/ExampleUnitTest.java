@@ -1,4 +1,4 @@
-package duoc.motosapp;
+package duoc.motocicletas;
 
 import org.junit.Test;
 
