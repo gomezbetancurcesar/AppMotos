@@ -40,9 +40,8 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/duoc/motocicletas/LoginActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="35" column="66" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="66" />
+              <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
               <folding>
-                <element signature="imports" expanded="true" />
                 <element signature="e#1281#1642#0" expanded="true" />
                 <element signature="e#1641#1642#0" expanded="true" />
                 <element signature="e#3703#3704#0" expanded="true" />
@@ -55,8 +54,8 @@
       <file leaf-file-name="AgregarEventosActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/duoc/motocicletas/AgregarEventosActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7145454">
-              <caret line="71" column="29" selection-start-line="71" selection-start-column="29" selection-end-line="71" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.68">
+              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3018#3019#0" expanded="true" />
@@ -2141,9 +2140,8 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/duoc/motocicletas/LoginActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="35" column="66" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="66" />
+          <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#1281#1642#0" expanded="true" />
             <element signature="e#1641#1642#0" expanded="true" />
             <element signature="e#3703#3704#0" expanded="true" />
@@ -2154,8 +2152,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/duoc/motocicletas/AgregarEventosActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7145454">
-          <caret line="71" column="29" selection-start-line="71" selection-start-column="29" selection-end-line="71" selection-end-column="29" />
+        <state vertical-scroll-proportion="0.68">
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3018#3019#0" expanded="true" />
