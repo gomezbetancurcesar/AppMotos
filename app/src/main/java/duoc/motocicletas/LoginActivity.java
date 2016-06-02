@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,10 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
+import duoc.clases.ConexionWS;
 
 public class LoginActivity extends AppCompatActivity{
     private static final String TAG = "LoginActivity";
@@ -152,13 +148,14 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
+
+    //Se declara una tarea asincrona para la validacion del login
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
         private final String txtUsuario;
         private final String txtPassword;
+
+        private ConexionWS conexionWS = new ConexionWS();
+        private String metodo = "LoginUsuario";
 
         UserLoginTask(String email, String password) {
             txtUsuario = email;
@@ -169,41 +166,13 @@ public class LoginActivity extends AppCompatActivity{
         protected Boolean doInBackground(Void... params) {
             boolean logeado = false;
 
-            final String NAMESPACE = "http://suarpe.com/";
-            final String URL="http://201.236.131.203:8091/ServicioClientes.asmx?op=LoginUsuario";
-            final String METHOD_NAME = "LoginUsuario";
-            final String SOAP_ACTION = "http://suarpe.com/LoginUsuario";
+            conexionWS.configurar(this.metodo);
+            conexionWS.getRequest().addProperty("user", this.txtUsuario);
+            conexionWS.getRequest().addProperty("password", this.txtPassword);
+            String esUsuario = conexionWS.llamarSimple();
 
-            try {
-                SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-                request.addProperty("user", this.txtUsuario);
-                request.addProperty("password", this.txtPassword);
-
-                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                envelope.dotNet = true;
-                envelope.implicitTypes = true;
-                envelope.setOutputSoapObject(request);
-
-                HttpTransportSE transporte = new HttpTransportSE(URL);
-                //transporte.debug = true;
-                transporte.setXmlVersionTag("<!--?xml version=\"1.0\" encoding= \"UTF-8\" ?-->");
-                transporte.call(SOAP_ACTION, envelope);
-
-                SoapObject respuesta = (SoapObject) envelope.bodyIn;
-                if(respuesta != null){
-                    String esUsuario = respuesta.getProperty(0).toString();
-
-                    if(esUsuario.equals("1")){
-                        logeado = true;
-                    }else{
-                        logeado = false;
-                    }
-                }else{
-                    logeado = false;
-                }
-            } catch (Exception e) {
-                logeado = false;
-                e.printStackTrace();
+            if(esUsuario.equals("1")){
+                logeado = true;
             }
             return logeado;
         }
@@ -213,7 +182,7 @@ public class LoginActivity extends AppCompatActivity{
             mAuthTask = null;
             showProgress(false);
             if (logeado){
-                Intent i = new Intent(LoginActivity.this, NoticiasEventosActivity.class);
+                Intent i = new Intent(LoginActivity.this, AgregarEventosActivity.class);
                 startActivity(i);
                 finish();
             }else{

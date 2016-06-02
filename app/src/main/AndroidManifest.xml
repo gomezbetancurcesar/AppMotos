@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NoticiasEventosActivity"
+            android:name=".AgregarEventosActivity"
             android:label="@string/title_activity_noticias_eventos"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
