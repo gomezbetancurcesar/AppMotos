@@ -93,6 +93,7 @@
                 android:layout_height="wrap_content"
                 android:text="Ingresar"
                 android:id="@+id/btnIngresarEvento" />
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

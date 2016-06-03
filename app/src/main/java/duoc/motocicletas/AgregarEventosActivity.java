@@ -124,7 +124,7 @@ public class AgregarEventosActivity extends AppCompatActivity {
     }
 
     public void redireccionar(){
-        Intent intent = new Intent(AgregarEventosActivity.this, EventosActivity.class);
+        Intent intent = new Intent(AgregarEventosActivity.this, ListadoEventosActivity.class);
         startActivity(intent);
     }
 
