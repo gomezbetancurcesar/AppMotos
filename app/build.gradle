@@ -6,10 +6,11 @@ android {
 
     defaultConfig {
         applicationId "duoc.motocicletas"
-        minSdkVersion 13
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -22,7 +23,8 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile files('src/main/java/duoc/libs/ksoap2-j2se-full-2.1.2.jar')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
-    compile files('src/main/java/duoc/libs/ksoap2-j2se-full-2.1.2.jar')
+    compile 'com.google.android.gms:play-services:9.0.0'
 }

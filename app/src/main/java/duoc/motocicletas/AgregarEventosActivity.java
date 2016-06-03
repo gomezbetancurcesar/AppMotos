@@ -47,6 +47,7 @@ public class AgregarEventosActivity extends AppCompatActivity {
         btnIngresarEventoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                redireccionar();
                 validarDatos();
             }
         });
@@ -98,7 +99,7 @@ public class AgregarEventosActivity extends AppCompatActivity {
         if (this.agregarEventoTask != null) {
             return;
         }
-        
+
         String titulo = txtTituloView.getText().toString();
         String direccion = txtDireccionView.getText().toString();
         String detalle = txtDetalleView.getText().toString();
@@ -112,14 +113,19 @@ public class AgregarEventosActivity extends AppCompatActivity {
         String fechaInicio = formato.format(fecha.getTime());
 
         formato = new SimpleDateFormat("HH:mm");
-        Integer hora = txtHoraInicioView.getCurrentHour();
-        Integer minuto = txtHoraInicioView.getCurrentMinute();
+        Integer hora = txtHoraInicioView.getHour();
+        Integer minuto = txtHoraInicioView.getMinute();
         fecha = new GregorianCalendar(0,0,0,hora, minuto);
         formato.setCalendar(fecha);
         String horaInicio = formato.format(fecha.getTime());
 
         this.agregarEventoTask = new AgregarEventoTask(titulo, direccion, fechaInicio, horaInicio, detalle);
         this.agregarEventoTask.execute((Void) null );
+    }
+
+    public void redireccionar(){
+        Intent intent = new Intent(AgregarEventosActivity.this, EventosActivity.class);
+        startActivity(intent);
     }
 
     public class AgregarEventoTask extends AsyncTask<Void, Void, Boolean>{
@@ -159,8 +165,7 @@ public class AgregarEventosActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean insertado){
             agregarEventoTask = null;
             if(insertado){
-                Intent intent = new Intent(AgregarEventosActivity.this, AgregarEventosActivity.class);
-                startActivity(intent);
+                redireccionar();
             }else{
                 txtTituloView.setError("Error al guardar");
                 txtDetalleView.setError("Error al guardar");
