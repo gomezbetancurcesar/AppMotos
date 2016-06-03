@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity{
         txtUsuarioView = (EditText) findViewById(R.id.txtUsuario);
 
         txtPasswordView = (EditText) findViewById(R.id.txtPassword);
+        /*
         txtPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -46,7 +47,7 @@ public class LoginActivity extends AppCompatActivity{
                 return false;
             }
         });
-
+*/
         Button btnIngresar = (Button) findViewById(R.id.btnIngresar);
         btnIngresar.setOnClickListener(new OnClickListener() {
             @Override
