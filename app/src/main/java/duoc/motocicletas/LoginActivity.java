@@ -183,7 +183,7 @@ public class LoginActivity extends AppCompatActivity{
             mAuthTask = null;
             showProgress(false);
             if (logeado){
-                Intent i = new Intent(LoginActivity.this, AgregarEventosActivity.class);
+                Intent i = new Intent(LoginActivity.this, EventosActivity.class);
                 startActivity(i);
                 finish();
             }else{

@@ -159,7 +159,7 @@ public class AgregarEventosActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean insertado){
             agregarEventoTask = null;
             if(insertado){
-                Intent intent = new Intent(AgregarEventosActivity.this, AgregarEventosActivity.class);
+                Intent intent = new Intent(AgregarEventosActivity.this, EventosActivity.class);
                 startActivity(intent);
             }else{
                 txtTituloView.setError("Error al guardar");
