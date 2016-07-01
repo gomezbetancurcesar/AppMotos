@@ -36,18 +36,7 @@ public class LoginActivity extends AppCompatActivity{
         txtUsuarioView = (EditText) findViewById(R.id.txtUsuario);
 
         txtPasswordView = (EditText) findViewById(R.id.txtPassword);
-        /*
-        txtPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-*/
+
         Button btnIngresar = (Button) findViewById(R.id.btnIngresar);
         btnIngresar.setOnClickListener(new OnClickListener() {
             @Override
@@ -183,7 +172,8 @@ public class LoginActivity extends AppCompatActivity{
             mAuthTask = null;
             showProgress(false);
             if (logeado){
-                Intent i = new Intent(LoginActivity.this, AgregarEventosActivity.class);
+//                Intent i = new Intent(LoginActivity.this, AgregarEventosActivity.class);
+                Intent i = new Intent(LoginActivity.this, VerEventosActivity.class);
                 startActivity(i);
                 finish();
             }else{

@@ -7,6 +7,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import java.util.ArrayList;
+
 public class ConexionWS{
     private String contenedor = "Activity";
     private String NAMESPACE = "http://suarpe.com/";
@@ -55,5 +57,41 @@ public class ConexionWS{
             e.printStackTrace();
         }
         return respuesta;
+    }
+
+    public ArrayList<Evento> traerTodos(){
+        ArrayList<Evento> eventos = new ArrayList<Evento>();
+        Evento evento;
+        try{
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            envelope.dotNet = true;
+            envelope.implicitTypes = true;
+            envelope.setOutputSoapObject(this.request);
+
+            HttpTransportSE transporte = new HttpTransportSE(URL);
+            //transporte.debug = true;
+            transporte.setXmlVersionTag("<!--?xml version=\"1.0\" encoding= \"UTF-8\" ?-->");
+            transporte.call(this.SOAP_ACTION, envelope);
+
+            //ObtieneTodosLosEventosResult
+            SoapObject obj1 = (SoapObject) envelope.getResponse();
+            SoapObject obj2 =(SoapObject) obj1.getProperty(0);
+            for(int i=0; i<obj2.getPropertyCount(); i++)
+            {
+                SoapObject obj3 =(SoapObject) obj2.getProperty(i);
+                evento = new Evento();
+
+                evento.setId(Integer.parseInt(obj3.getProperty(0).toString()));
+                evento.setTitulo(obj3.getProperty(1).toString());
+                evento.setDetalle(obj3.getProperty(2).toString());
+                evento.setDireccion(obj3.getProperty(3).toString());
+                evento.setFechaInicio(obj3.getProperty(4).toString());
+                evento.setHoraInicio(obj3.getProperty(5).toString());
+                eventos.add(evento);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return eventos;
     }
 }

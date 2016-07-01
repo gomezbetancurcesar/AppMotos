@@ -31,17 +31,12 @@
                     />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/txtDireccion"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
-                <EditText
-                    android:id="@+id/txtDireccion"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hintTxtDireccion"
-                    />
-            </android.support.design.widget.TextInputLayout>
+                android:hint="@string/hintTxtDireccion"
+                />
 
             <TextView
                 android:layout_width="fill_parent"

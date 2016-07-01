@@ -15,4 +15,5 @@
     <string name="hintTxtDireccion">Dirección</string>
     <string name="hintTxtDetalle">Detalle</string>
     <string name="title_activity_eventos">Eventos</string>
+    <string name="title_activity_ver_eventos">Ver Eventos</string>
 </resources>
