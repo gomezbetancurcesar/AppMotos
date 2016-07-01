@@ -20,7 +20,7 @@
             android:layout_width="fill_parent"
             android:layout_height="45dp"
             android:text="Ingresar Evento"
-            android:id="@+id/irAgregarEvento" />
+            android:id="@+id/gi" />
     </LinearLayout>
 
     <ImageView
