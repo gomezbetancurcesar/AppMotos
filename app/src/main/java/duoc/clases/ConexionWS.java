@@ -3,6 +3,7 @@ package duoc.clases;
 import android.util.Log;
 
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
@@ -44,7 +45,7 @@ public class ConexionWS{
             envelope.implicitTypes = true;
             envelope.setOutputSoapObject(this.request);
 
-            HttpTransportSE transporte = new HttpTransportSE(URL);
+            HttpTransportSE transporte = new HttpTransportSE(this.URL);
             //transporte.debug = true;
             transporte.setXmlVersionTag("<!--?xml version=\"1.0\" encoding= \"UTF-8\" ?-->");
             transporte.call(this.SOAP_ACTION, envelope);
@@ -68,19 +69,22 @@ public class ConexionWS{
             envelope.implicitTypes = true;
             envelope.setOutputSoapObject(this.request);
 
-            HttpTransportSE transporte = new HttpTransportSE(URL);
+            HttpTransportSE transporte = new HttpTransportSE(this.URL);
             //transporte.debug = true;
             transporte.setXmlVersionTag("<!--?xml version=\"1.0\" encoding= \"UTF-8\" ?-->");
+
             transporte.call(this.SOAP_ACTION, envelope);
 
+            //String responseDump = transporte.responseDump;
+            //Log.e("a response", responseDump);
             //ObtieneTodosLosEventosResult
-            SoapObject obj1 = (SoapObject) envelope.getResponse();
+            SoapObject obj1 = (SoapObject) envelope.bodyIn;
+
             SoapObject obj2 =(SoapObject) obj1.getProperty(0);
             for(int i=0; i<obj2.getPropertyCount(); i++)
             {
                 SoapObject obj3 =(SoapObject) obj2.getProperty(i);
                 evento = new Evento();
-
                 evento.setId(Integer.parseInt(obj3.getProperty(0).toString()));
                 evento.setTitulo(obj3.getProperty(1).toString());
                 evento.setDetalle(obj3.getProperty(2).toString());
