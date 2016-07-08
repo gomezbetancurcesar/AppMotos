@@ -8,13 +8,21 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -26,6 +34,11 @@ public class VerEventosActivity extends FragmentActivity implements OnMapReadyCa
     private GoogleMap mMap;
     private llamadaAsyncWS mostrarPuntos = null;
     private LatLng coordenadasClick;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +49,22 @@ public class VerEventosActivity extends FragmentActivity implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.barra_superior);
+
         mostrarPuntos = new llamadaAsyncWS();
         mostrarPuntos.execute((Void) null);
+
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public void clickEnMapa(LatLng posicion){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.items_menu, menu);
+        return true;
+    }
+
+    public void clickEnMapa(LatLng posicion) {
         Intent nuevoActivity = new Intent(VerEventosActivity.this, AgregarEventosActivity.class);
         Bundle opcionesVista = new Bundle();
 
@@ -52,22 +76,22 @@ public class VerEventosActivity extends FragmentActivity implements OnMapReadyCa
         startActivity(nuevoActivity);
     }
 
-    public void marcarPuntos(ArrayList<Evento> eventos){
+    public void marcarPuntos(ArrayList<Evento> eventos) {
         LatLng posicionEnMapa;
-        LatLng primeraPosicion = new LatLng(0,0);
+        LatLng primeraPosicion = new LatLng(0, 0);
         String titulo;
         String descripcion;
-        MarkerOptions opcionesPunto = new MarkerOptions();;
+        MarkerOptions opcionesPunto = new MarkerOptions();
+        ;
 
         int puntos = 0;
-        for(Evento evento : eventos){
-            opcionesPunto = new MarkerOptions();
+        for (Evento evento : eventos) {
             String[] coordenadas = evento.getDireccion().split(",");
-            if(coordenadas.length > 1){
+            if (coordenadas.length > 1) {
                 double latitud = Double.parseDouble(coordenadas[0].trim());
                 double longitud = Double.parseDouble(coordenadas[1].trim());
                 posicionEnMapa = new LatLng(latitud, longitud);
-                if(puntos == 0){
+                if (puntos == 0) {
                     primeraPosicion = new LatLng(latitud, longitud);
                 }
                 titulo = evento.getTitulo();
@@ -77,21 +101,14 @@ public class VerEventosActivity extends FragmentActivity implements OnMapReadyCa
                 opcionesPunto.position(posicionEnMapa);
                 opcionesPunto.title(titulo);
                 opcionesPunto.snippet(descripcion);
+                opcionesPunto.icon(BitmapDescriptorFactory.fromResource(R.drawable.marcador_mapa));
                 mMap.addMarker(opcionesPunto);
                 puntos++;
             }
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(primeraPosicion, 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(primeraPosicion, 10));
     }
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -101,9 +118,22 @@ public class VerEventosActivity extends FragmentActivity implements OnMapReadyCa
             public void onMapClick(LatLng posicionClick) {
                 DialogoAceptar dialogo = new DialogoAceptar();
                 coordenadasClick = posicionClick;
-                dialogo.show(getFragmentManager(),"Dialogo_de_algo");
+                dialogo.show(getFragmentManager(), "Dialogo_de_algo");
             }
         });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                return false;
+            }
+        });
+    }
+
+    private class claseHerencia extends AppCompatActivity {
+        public void setToolbar() {
+
+        }
     }
 
     private class llamadaAsyncWS extends AsyncTask<Void, Void, Void> {
@@ -112,7 +142,7 @@ public class VerEventosActivity extends FragmentActivity implements OnMapReadyCa
         private ConexionWS conexionWS = new ConexionWS();
         private String metodo = "ObtieneTodosLosEventos";
 
-        public llamadaAsyncWS(){
+        public llamadaAsyncWS() {
         }
 
         @Override
@@ -123,7 +153,7 @@ public class VerEventosActivity extends FragmentActivity implements OnMapReadyCa
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(Void result) {
             marcarPuntos(this.eventos);
             Log.i("", "onPostExecute");
         }

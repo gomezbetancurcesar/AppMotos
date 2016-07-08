@@ -3,13 +3,21 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:theme="@style/AppTheme.NoActionBar"
     tools:context="duoc.motocicletas.LoginActivity">
 
-    <!-- Login progress -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/barra_superior"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
     <ProgressBar
         android:id="@+id/login_progress"
         style="?android:attr/progressBarStyleLarge"
@@ -27,6 +35,10 @@
             android:id="@+id/user_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
@@ -56,7 +68,6 @@
                     android:maxLines="1"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
-
             <Button
                 android:id="@+id/btnIngresar"
                 style="?android:textAppearanceSmall"
@@ -65,7 +76,6 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/btnIngresar"
                 android:textStyle="bold" />
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

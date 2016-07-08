@@ -9,14 +9,18 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import duoc.clases.ConexionWS;
+import duoc.clases.Session;
 
 public class LoginActivity extends AppCompatActivity{
     private static final String TAG = "LoginActivity";
@@ -32,8 +36,11 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
+
         txtUsuarioView = (EditText) findViewById(R.id.txtUsuario);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.barra_superior);
+        setSupportActionBar(myToolbar);
 
         txtPasswordView = (EditText) findViewById(R.id.txtPassword);
 
@@ -47,6 +54,21 @@ public class LoginActivity extends AppCompatActivity{
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.items_menu, menu);
+        return true;
+    }
+
+
+    protected void algo(){
+        //Con esta funcion podemos ocultar el menu
+        getSupportActionBar().hide();
     }
 
     /**
@@ -161,7 +183,9 @@ public class LoginActivity extends AppCompatActivity{
             conexionWS.getRequest().addProperty("password", this.txtPassword);
             String esUsuario = conexionWS.llamarSimple();
 
-            if(esUsuario.equals("1")){
+            if(!esUsuario.equals("0")){
+                Session session = new Session();
+                session.escribirSession(Integer.parseInt(esUsuario));
                 logeado = true;
             }
             return logeado;
