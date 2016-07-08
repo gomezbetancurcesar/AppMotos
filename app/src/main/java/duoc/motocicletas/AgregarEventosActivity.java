@@ -67,7 +67,7 @@ public class AgregarEventosActivity extends AppCompatActivity {
         this.btnIngresarEventoView = (Button) findViewById(R.id.btnIngresarEvento);
 
         this.txtDireccionView.setText(latitud + ", " + longitud);
-        this.txtDireccionView.setVisibility(View.INVISIBLE);
+        this.txtDireccionView.setVisibility(View.GONE);
 
         btnIngresarEventoView.setOnClickListener(new View.OnClickListener() {
             @Override

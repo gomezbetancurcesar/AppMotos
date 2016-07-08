@@ -1182,7 +1182,7 @@ MERGED from [com.android.support:support-v4:23.4.0] C:\Users\equipo-desarrollo-2
 	android:icon
 		ADDED from C:\Users\equipo-desarrollo-2\AndroidStudioProjects\AppMotos\app\src\main\AndroidManifest.xml:18:9-36
 	android:theme
-		ADDED from C:\Users\equipo-desarrollo-2\AndroidStudioProjects\AppMotos\app\src\main\AndroidManifest.xml:22:9-52
+		ADDED from C:\Users\equipo-desarrollo-2\AndroidStudioProjects\AppMotos\app\src\main\AndroidManifest.xml:22:9-40
 	android:name
 		ADDED from C:\Users\equipo-desarrollo-2\AndroidStudioProjects\AppMotos\app\src\main\AndroidManifest.xml:21:9-68
 activity#duoc.motocicletas.LoginActivity

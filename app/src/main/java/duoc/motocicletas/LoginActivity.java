@@ -38,10 +38,10 @@ public class LoginActivity extends AppCompatActivity{
         setContentView(R.layout.activity_login);
 
         txtUsuarioView = (EditText) findViewById(R.id.txtUsuario);
-
+/*
         Toolbar myToolbar = (Toolbar) findViewById(R.id.barra_superior);
         setSupportActionBar(myToolbar);
-
+*/
         txtPasswordView = (EditText) findViewById(R.id.txtPassword);
 
         Button btnIngresar = (Button) findViewById(R.id.btnIngresar);
@@ -58,13 +58,13 @@ public class LoginActivity extends AppCompatActivity{
 
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.items_menu, menu);
         return true;
-    }
-
+    }*/
 
     protected void algo(){
         //Con esta funcion podemos ocultar el menu

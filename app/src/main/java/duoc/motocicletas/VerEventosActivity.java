@@ -49,7 +49,7 @@ public class VerEventosActivity extends FragmentActivity implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.barra_superior);
+        //Toolbar myToolbar = (Toolbar) findViewById(R.id.barra_superior);
 
         mostrarPuntos = new llamadaAsyncWS();
         mostrarPuntos.execute((Void) null);
@@ -57,12 +57,14 @@ public class VerEventosActivity extends FragmentActivity implements OnMapReadyCa
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.items_menu, menu);
         return true;
     }
+    */
 
     public void clickEnMapa(LatLng posicion) {
         Intent nuevoActivity = new Intent(VerEventosActivity.this, AgregarEventosActivity.class);
